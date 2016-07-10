@@ -10,9 +10,15 @@ defmodule Maintain.RegistrationController do
   def create(conn, %{"user" => user_params}) do
     changeset = User.changeset(%User{}, user_params)
 
-    case Maintain.Registration.create(changeset, Registration.Repo) do
-      {:ok, changeset} -> false # Sign the user in
-      {:error, changeset} -> false # Show error
+    case Maintain.User.create(changeset, Maintain.Repo) do
+      {:ok, changeset} ->
+        conn
+        |> put_flash(:info, "Account created")
+        |> redirect(to: page_path(conn, :index))
+      {:error, changeset} ->
+        conn
+        |> put_flash(:info, "Error creating account")
+        |> render(registration_path(conn, :new))
     end
   end
 end
