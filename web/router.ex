@@ -11,16 +11,19 @@ defmodule Maintain.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    # TODO: plug :authenticate_with_token
   end
 
   scope "/", Maintain do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    resources "/users", UserController, except: [:index]
+
+    resources "/registrations", RegistrationController, only: [:new, :create]
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Maintain do
-  #   pipe_through :api
-  # end
+  #scope "/api/v1", Maintain do
+  #  pipe_through :api
+  #end
 end
