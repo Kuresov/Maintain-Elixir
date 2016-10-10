@@ -18,12 +18,20 @@ defmodule Maintain.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+
+    get "/login", UserController, :login
+    post "/login", UserController, :create_session
+    delete "/logout", UserController, :delete_session
     resources "/users", UserController, except: [:index]
 
     resources "/registrations", RegistrationController, only: [:new, :create]
+
   end
 
-  #scope "/api/v1", Maintain do
+  #scope "/api", Maintain.Api, as: :api do
   #  pipe_through :api
+
+  #  scope "/v1", V1, as: :v1 do
+  #  end
   #end
 end
